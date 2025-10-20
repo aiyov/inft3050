@@ -80,17 +80,6 @@ export default function ProductDetailPage() {
       
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          {/* Breadcrumb */}
-          <div className="mb-6">
-            <Link 
-              href="/"
-              className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Products
-            </Link>
-          </div>
-
           {/* Product Detail */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
