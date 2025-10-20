@@ -75,8 +75,8 @@ export default function SearchPage() {
                   )}
                 </div>
 
-                {/* Products List */}
-                <div className="space-y-4">
+                {/* Products Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {products.map((product) => (
                     <ProductItem key={product.ID} product={product} />
                   ))}
