@@ -2,12 +2,26 @@
 
 import { Search, User, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 interface HeaderProps {
   className?: string;
 }
 
 export default function Header({ className }: HeaderProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
   return (
     <header className={`bg-white border-b border-gray-200 ${className}`}>
       {/* Top Info Bar */}
@@ -26,7 +40,7 @@ export default function Header({ className }: HeaderProps) {
           {/* Logo */}
           <div className="flex items-center">
             <div className="text-3xl font-bold text-black">
-              <span className="text-yellow-500">JB</span> HI-FI
+              <span className="text-yellow-500">INFT3050</span>
             </div>
             <div className="text-xs text-gray-600 ml-2 hidden sm:block">
               ALWAYS CHEAP PRICES
@@ -38,10 +52,12 @@ export default function Header({ className }: HeaderProps) {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Q Search products, brands, and more..."
+                value={searchQuery}
+                onChange={handleInputChange}
+                placeholder="Search products"
                 className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
               />
-              <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search onClick={handleSearch} className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             </div>
           </div>
 

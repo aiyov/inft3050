@@ -1,7 +1,6 @@
 'use client';
 import Header from '@/app/components/layout/Header';
 import Navigation from '@/app/components/layout/Navigation';
-import PromoBanner from '@/app/components/sections/PromoBanner';
 import CategorySection from '@/app/components/sections/CategorySection';
 import HotDealsSection from '@/app/components/sections/HotDealsSection';
 
@@ -13,9 +12,6 @@ export default function Home() {
       
       {/* Navigation */}
       <Navigation />
-      
-      {/* Promo Banner */}
-      <PromoBanner />
       
       {/* Category Section */}
       <CategorySection />

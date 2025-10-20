@@ -10,7 +10,7 @@ export function useGenres() {
   return useQuery({
     queryKey: ['genres', 'Name,GenreID'],
     queryFn: async () => {
-      return await request<Genre[]>('/api/inft3050/Genre', {
+      return await request<{list: Genre[]}>('/api/inft3050/Genre', {
         params: { fields: 'Name,GenreID' },
       });
     },
