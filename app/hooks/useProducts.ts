@@ -30,6 +30,7 @@ export interface UseProductsParams {
   where?: string;
   limit?: number;
   offset?: number;
+  sort?: string;
 }
 
 export function useProducts(params: UseProductsParams = {}) {

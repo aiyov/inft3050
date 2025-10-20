@@ -39,9 +39,11 @@ export default function Header({ className }: HeaderProps) {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="text-3xl font-bold text-black">
-              <span className="text-yellow-500">INFT3050</span>
-            </div>
+            <Link href="/">
+              <div className="text-3xl font-bold text-black">
+                <span className="text-yellow-500">INFT3050</span>
+              </div>
+            </Link>
             <div className="text-xs text-gray-600 ml-2 hidden sm:block">
               ALWAYS CHEAP PRICES
             </div>

@@ -13,9 +13,6 @@ export default function Home() {
       {/* Navigation */}
       <Navigation />
       
-      {/* Category Section */}
-      <CategorySection />
-      
       {/* Hot Deals Section */}
       <HotDealsSection />
     </div>
