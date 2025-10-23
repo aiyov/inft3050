@@ -30,4 +30,4 @@ export function useCreateProduct() {
   });
 }
 
-export default useUpdateProduct;
+export default useCreateProduct;
