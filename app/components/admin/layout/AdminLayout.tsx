@@ -5,11 +5,9 @@ import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { 
-  LayoutDashboard, 
   Users, 
   Package, 
   ShoppingCart, 
-  Settings, 
   LogOut,
   Menu,
   X,
@@ -32,16 +30,13 @@ const getNavigationItems = (role: string) => {
 };
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { authState, logout } = useAuth();
+  const { logout } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+ 
 
-  if (!authState.isAuthenticated || !authState.user) {
-    router.push('/login');
-    return null;
-  }
-
-  const navigationItems = getNavigationItems(authState.user.role);
+  const navigationItems = getNavigationItems('admin');
 
   const handleLogout = () => {
     logout();
@@ -64,7 +59,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       }`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <h1 className="text-xl font-bold text-gray-900">
-            JB HI-FI Admin
+            INFT3050 Admin
           </h1>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -74,24 +69,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </button>
         </div>
 
-        {/* User info */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-semibold">
-                {authState.user.firstName[0]}{authState.user.lastName[0]}
-              </span>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">
-                {authState.user.firstName} {authState.user.lastName}
-              </p>
-              <p className="text-xs text-gray-500 capitalize">
-                {authState.user.role}
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* Navigation */}
         <nav className="mt-6">
@@ -138,7 +115,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">
-                Welcome back, {authState.user.firstName}!
+                Welcome back, {user.username}!
               </span>
             </div>
           </div>
