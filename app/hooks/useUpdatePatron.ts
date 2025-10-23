@@ -16,7 +16,7 @@ export function useUpdatePatron() {
     mutationFn: async ({ patronId, data }: { patronId: string; data: UpdatePatronData }) => {
       return await request(`/api/inft3050/Patrons/${patronId}`, {
         method: 'PATCH',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
           'Content-Type': 'application/json',
         },

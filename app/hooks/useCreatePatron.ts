@@ -15,7 +15,7 @@ export function useCreatePatron() {
     mutationFn: async (data: CreatePatronData) => {
       return await request('/api/inft3050/Patrons', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
           'Content-Type': 'application/json',
         },

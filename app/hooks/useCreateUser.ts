@@ -17,7 +17,7 @@ export function useCreateUser() {
     mutationFn: async (data: CreateUserData) => {
       return await request('/api/inft3050/User', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
           'Content-Type': 'application/json',
         },

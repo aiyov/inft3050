@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
 import AdminLayout from '@/app/components/admin/layout/AdminLayout';
 import { usePatrons, Patron } from '@/app/hooks/usePatrons';
 import { useCreatePatron } from '@/app/hooks/useCreatePatron';
@@ -10,16 +9,26 @@ import { useDeletePatron } from '@/app/hooks/useDeletePatron';
 import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
 
 export default function UsersPage() {
-  const { authState } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingPatron, setEditingPatron] = useState<Patron | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     Name: '',
     Email: '',
-    Salt: '',
-    HashPW: '',
+    password: '',
   });
+
+  async function sha256(message: string) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
+  const generateSalt = () => {
+    const salt = window.crypto.randomUUID().replaceAll("-", "");
+    return salt;
+  }
 
   // 使用patron hooks
   const { 
@@ -40,7 +49,12 @@ export default function UsersPage() {
   const handleCreatePatron = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createPatron.mutateAsync(formData);
+      await createPatron.mutateAsync({
+        Name: formData.Name,
+        Email: formData.Email,
+        Salt: generateSalt(),
+        HashPW: await sha256(formData.password + generateSalt())
+      });
       setShowCreateModal(false);
       resetForm();
     } catch (error) {
@@ -55,7 +69,12 @@ export default function UsersPage() {
     try {
       await updatePatron.mutateAsync({ 
         patronId: editingPatron.UserID.toString(), 
-        data: formData 
+        data: {
+          Name: formData.Name,
+          Email: formData.Email,
+          Salt: generateSalt(),
+          HashPW: await sha256(formData.password + generateSalt())
+        }
       });
       setEditingPatron(null);
       resetForm();
@@ -80,8 +99,7 @@ export default function UsersPage() {
     setFormData({
       Name: '',
       Email: '',
-      Salt: '',
-      HashPW: '',
+      password: '',
     });
   };
 
@@ -90,8 +108,7 @@ export default function UsersPage() {
     setFormData({
       Name: patron.Name || '',
       Email: patron.Email || '',
-      Salt: '',
-      HashPW: '',
+      password: '',
     });
   };
 
@@ -270,23 +287,12 @@ export default function UsersPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Salt</label>
-                    <input
-                      type="text"
-                      name="Salt"
-                      value={formData.Salt}
-                      onChange={handleChange}
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Hash Password</label>
+                    <label className="block text-sm font-medium text-gray-700">Password</label>
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        name="HashPW"
-                        value={formData.HashPW}
+                        name="password"
+                        value={formData.password}
                         onChange={handleChange}
                         required
                         className="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
@@ -358,24 +364,13 @@ export default function UsersPage() {
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Salt</label>
-                    <input
-                      type="text"
-                      name="Salt"
-                      value={formData.Salt}
-                      onChange={handleChange}
-                      required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Hash Password</label>
+                    <div>
+                    <label className="block text-sm font-medium text-gray-700">Password</label>
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        name="HashPW"
-                        value={formData.HashPW}
+                        name="password"
+                        value={formData.password}
                         onChange={handleChange}
                         required
                         className="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
