@@ -37,7 +37,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (!authState.isAuthenticated || !authState.user) {
-    router.push('/admin/login');
+    router.push('/login');
     return null;
   }
 
@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const handleLogout = () => {
     logout();
-    router.push('/admin/login');
+    router.push('/login');
   };
 
   return (

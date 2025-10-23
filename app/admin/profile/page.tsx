@@ -28,25 +28,22 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (!authState.isAuthenticated || !authState.user) {
-      router.push('/admin/login');
-      return;
-    }
-
     // Initialize form with user data
-    setFormData({
-      firstName: authState.user.firstName || '',
-      lastName: authState.user.lastName || '',
-      email: authState.user.email || '',
-      phone: authState.user.phone || '',
-      address: authState.user.address || '',
-      city: authState.user.city || '',
-      state: authState.user.state || '',
-      zipCode: authState.user.zipCode || '',
-      country: authState.user.country || '',
-      password: '',
-    });
-  }, [authState, router]);
+    if (authState.user) {
+      setFormData({
+        firstName: authState.user.firstName || '',
+        lastName: authState.user.lastName || '',
+        email: authState.user.email || '',
+        phone: authState.user.phone || '',
+        address: authState.user.address || '',
+        city: authState.user.city || '',
+        state: authState.user.state || '',
+        zipCode: authState.user.zipCode || '',
+        country: authState.user.country || '',
+        password: '',
+      });
+    }
+  }, [authState.user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

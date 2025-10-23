@@ -27,20 +27,12 @@ export default function MyOrdersPage() {
   });
 
   useEffect(() => {
-    if (!authState.isAuthenticated || !authState.user) {
-      router.push('/admin/login');
-      return;
-    }
-
-    // Only customer can access this page
-    if (authState.user.role !== 'customer') {
-      router.push('/admin/products');
-      return;
-    }
     // Load user's orders when user is available
-    const userOrders = mockOrders.filter(order => order.userId === authState.user!.id);
-    setOrders(userOrders);
-  }, [authState, router]);
+    if (authState.user) {
+      const userOrders = mockOrders.filter(order => order.userId === authState.user!.id);
+      setOrders(userOrders);
+    }
+  }, [authState.user]);
 
   const handleUpdateOrder = async (orderId: string, newStatus: string) => {
     setLoading(true);

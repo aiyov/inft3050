@@ -27,18 +27,6 @@ export default function ProductsPage() {
     isActive: true,
   });
 
-  useEffect(() => {
-    if (!authState.isAuthenticated || !authState.user) {
-      router.push('/admin/login');
-      return;
-    }
-
-    // Only admin and employee can access this page
-    if (!['admin', 'employee'].includes(authState.user.role)) {
-      router.push('/admin/my-orders');
-      return;
-    }
-  }, [authState, router]);
 
   const isAdmin = authState.user?.role === 'admin';
 

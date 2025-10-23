@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, User, ShoppingCart } from 'lucide-react';
+import { Search, User, ShoppingCart, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -75,7 +75,14 @@ export default function Header({ className }: HeaderProps) {
                  className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
                >
                  <User className="w-4 h-4" />
-                 <span className="hidden sm:inline">Log in</span>
+                 <span className="hidden sm:inline">sign in</span>
+               </Link>
+               <Link
+                 href="/signup"
+                 className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
+               >
+                 <LogIn className="w-4 h-4" />
+                 <span className="hidden sm:inline">Sign In</span>
                </Link>
              </div>
              <div className="flex items-center space-x-1">

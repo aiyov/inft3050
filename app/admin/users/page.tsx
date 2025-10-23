@@ -30,18 +30,6 @@ export default function UsersPage() {
     isActive: true,
   });
 
-  useEffect(() => {
-    if (!authState.isAuthenticated || !authState.user) {
-      router.push('/admin/login');
-      return;
-    }
-
-    // Only admin can access this page
-    if (authState.user.role !== 'admin') {
-      router.push('/admin/products');
-      return;
-    }
-  }, [authState, router]);
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
