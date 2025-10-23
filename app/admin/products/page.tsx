@@ -10,6 +10,7 @@ import { useGenres } from '@/app/hooks/useGenres';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 
 export default function UsersPage() {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ export default function UsersPage() {
     Author: '',
     Description: '',
     SubGenre: 0,
-    LastUpdatedBy: '',
+    LastUpdatedBy: user.username,
   });
 
   // 使用product hooks
@@ -84,7 +85,7 @@ export default function UsersPage() {
       Author: '',
       Description: '',
       SubGenre: 0,
-      LastUpdatedBy: '',
+      LastUpdatedBy: user.username,
     });
   };
 
@@ -95,7 +96,7 @@ export default function UsersPage() {
       Author: product.Author || '',
       Description: product.Description || '',
       SubGenre: product.SubGenre || 0,
-      LastUpdatedBy: product.LastUpdatedBy || '',
+      LastUpdatedBy: user.username,
     });
   };
 
@@ -311,7 +312,7 @@ export default function UsersPage() {
                       ))}
                     </select>
                   </div>
-                  <div>
+                  <div className="hidden">
                     <label className="block text-sm font-medium text-gray-700">Last Updated By</label>
                     <input
                       type="text"
@@ -404,7 +405,7 @@ export default function UsersPage() {
                       ))}
                     </select>
                   </div>
-                  <div>
+                  <div className="hidden">
                     <label className="block text-sm font-medium text-gray-700">Last Updated By</label>
                     <input
                       type="text"
