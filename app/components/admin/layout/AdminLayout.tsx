@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
   Users, 
@@ -35,6 +35,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
  
+  const activeMenu = usePathname();
 
   const navigationItems = getNavigationItems('admin');
 
@@ -78,8 +79,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               return (
                 <Link
                   key={item.name}
-                  href={item.href}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 mb-1"
+                  href={item.href}  
+                  className={`flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 mb-1 ${activeMenu === item.href ? 'bg-gray-100 text-gray-900' : ''}`}
                 >
                   <Icon className="w-5 h-5 mr-3" />
                   {item.name}
