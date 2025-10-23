@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import useLogin from '../hooks/useLogin';
 
 export default function AdminLoginPage() {
-  const { mutate: login, isPending: isLoading } = useLogin();
+  const { mutateAsync: login, isPending: isLoading } = useLogin();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({

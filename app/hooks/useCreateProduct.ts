@@ -1,21 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { request } from '@/app/lib/request';
 
-export interface UpdateProductData {
-  Name?: string;
-  Author?: string;
-  Description?: string;
-  SubGenre?: number;
-  LastUpdatedBy?: string;
+export interface CreateProductData {
+  Name: string;
+  Author: string;
+  Description: string;
+  SubGenre: number;
+  LastUpdatedBy: string;
 }
 
-export function useUpdateProduct() {
+export function useCreateProduct() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ productId, data }: { productId: string; data: UpdateProductData }) => {
-      return await request(`/api/inft3050/Product/${productId}`, {
-        method: 'PATCH',
+    mutationFn: async (data: CreateProductData) => {
+      return await request(`/api/inft3050/Product`, {
+        method: 'POST',
         body: data,
         headers: {
           'Content-Type': 'application/json',

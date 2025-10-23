@@ -82,7 +82,7 @@ export default function Header({ className }: HeaderProps) {
                  className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
                >
                  <LogIn className="w-4 h-4" />
-                 <span className="hidden sm:inline">Sign In</span>
+                 <span className="hidden sm:inline">Sign Up</span>
                </Link>
              </div>
              <div className="flex items-center space-x-1">
