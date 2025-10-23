@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { request } from '@/app/lib/request';
+import { LoginResponse } from '../lib/api-services';
 
 
-export function useDeleteUser() {
-  const queryClient = useQueryClient();
+export function useLogin() {
 
   return useMutation({
     mutationFn: async (data: { username: string; password: string }) => {
@@ -15,12 +15,11 @@ export function useDeleteUser() {
         },
       });
     },
-    onSuccess: (data:any) => {
+    onSuccess: (data:LoginResponse) => {
       localStorage.setItem('isLoggedIn', 'true');
-      // queryClient.invalidateQueries({ queryKey: ['users'] });
-      // queryClient.invalidateQueries({ queryKey: ['user'] });
+      localStorage.setItem('user', JSON.stringify(data));
     },
   });
 }
 
-export default useDeleteUser;
+export default useLogin;

@@ -30,9 +30,10 @@ export interface LoginData {
 }
 
 export interface LoginResponse {
-  user: User;
-  token: string;
-  refreshToken: string;
+  id: number;
+  email: string;
+  username: string;
+  isAdmin: boolean;
 }
 
 export interface ForgotPasswordData {

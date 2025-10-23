@@ -3,14 +3,9 @@ import { request } from '@/app/lib/request';
 import { useState, useMemo } from 'react';
 
 export interface Patron {
-  ID: number;
+  UserID: number;
   Name: string;
   Email: string;
-  Phone: string;
-  Address: string;
-  MembershipType: string;
-  CreatedAt: string;
-  UpdatedAt: string;
 }
 
 export interface PageInfo {

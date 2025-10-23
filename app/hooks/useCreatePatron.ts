@@ -4,9 +4,8 @@ import { request } from '@/app/lib/request';
 export interface CreatePatronData {
   Name: string;
   Email: string;
-  Phone: string;
-  Address: string;
-  MembershipType: string;
+  Salt: string;
+  HashPW: string;
 }
 
 export function useCreatePatron() {

@@ -2,11 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { request } from '@/app/lib/request';
 
 export interface UpdatePatronData {
+  UserID?: number;
   Name?: string;
   Email?: string;
-  Phone?: string;
-  Address?: string;
-  MembershipType?: string;
+  Salt?: string;
+  HashPW?: string;
 }
 
 export function useUpdatePatron() {
