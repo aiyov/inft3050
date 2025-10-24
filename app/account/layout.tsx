@@ -13,15 +13,15 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   useEffect(() => {
-    if (isAuthenticated && role === 'customer') {
+    if (isAuthenticated && role !== 'customer') {
       handleLogout();
-      router.replace('/admin/login');
+      router.replace('/login');
     }else if(!isAuthenticated){
-      router.replace('/admin/login');
+      router.replace('/login');
     }
   }, [isAuthenticated, role, handleLogout]);
 
-  if (!isAuthenticated && pathname !== '/admin/login') {
+  if (!isAuthenticated && pathname !== '/login') {
     return <div />;
   }
   return children

@@ -22,7 +22,7 @@ const getNavigationItems = (role: string) => {
   const baseItems = [
     { name: 'Products', href: '/admin/products', icon: Package, roles: ['admin', 'employee'] },
     { name: 'Users', href: '/admin/users', icon: Users, roles: ['admin'] },
-    { name: 'My Orders', href: '/admin/my-orders', icon: ShoppingCart, roles: ['customer'] },
+    { name: 'My Orders', href: '/account/my-orders', icon: ShoppingCart, roles: ['customer'] },
     { name: 'Profile', href: role !== 'customer' ? '/admin/profile' : '/account/profile', icon: User, roles: ['customer', 'employee', 'admin'] },
   ];
 

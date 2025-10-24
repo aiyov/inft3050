@@ -5,10 +5,12 @@ import AdminLayout from '@/app/components/backstage-common/layout/AdminLayout';
 import { Eye, EyeOff, Save } from 'lucide-react';
 import useAuth from '@/app/hooks/useAuth';
 import useUpdateUser from '@/app/hooks/useUpdateUser';
+import useUser from '@/app/hooks/useUser';
 
 export default function AdminProfile() {
   const { user, role, isAuthenticated } = useAuth(); 
   const { mutateAsync: updateUser, isPending: isLoading } = useUpdateUser();
+  const { data: userData } = useUser(user?.id);
   const [showPassword, setShowPassword] = useState(false);
   const isEmployee = useMemo(() => role === 'employee', [role]);
   const [formData, setFormData] = useState({
@@ -19,14 +21,14 @@ export default function AdminProfile() {
 
   useEffect(() => {
     // Initialize form with user data
-    if (user) {
+    if (userData) {
       setFormData({
-        username: user.username || '',
-        email: user.email || '',
+        username: userData.UserName || '',
+        email: userData.Email || '',
         password: '',
       });
     }
-  }, [user]);
+  }, [userData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -2,14 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { request } from '@/app/lib/request';
 
 export interface UserDetail {
-  ID: number;
-  Username: string;
+  UserID: number;
+  UserName: string;
   Email: string;
-  FirstName: string;
-  LastName: string;
-  Role: string;
-  CreatedAt: string;
-  UpdatedAt: string;
+  Name: string;
 }
 
 export function useUser(userId: string) {
