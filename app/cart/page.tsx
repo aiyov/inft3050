@@ -155,11 +155,12 @@ export default function CartPage() {
                 </div>
                 
                 <div className="space-y-3">
-                  <button
-                    className="w-full px-6 py-3 bg-yellow-400 text-black rounded-md hover:bg-yellow-500 transition-colors font-medium"
+                  <Link
+                    href="/checkout"
+                    className="block w-full px-6 py-3 text-center bg-yellow-400 text-black rounded-md hover:bg-yellow-500 transition-colors font-medium"
                   >
                     Proceed to Checkout
-                  </button>
+                  </Link>
                   <Link
                     href="/"
                     className="block w-full px-6 py-3 text-center border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
