@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
+import useAuth from '@/app/hooks/useAuth';
 import Link from 'next/link';
 import { 
   Users, 
@@ -30,7 +30,7 @@ const getNavigationItems = (role: string) => {
 };
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { logout } = useAuth();
+  const { handleLogout: logout } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const handleLogout = () => {
     logout();
-    router.push('/login');
+    router.push('/admin/login');
   };
 
   return (

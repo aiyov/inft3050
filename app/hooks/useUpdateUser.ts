@@ -16,7 +16,7 @@ export function useUpdateUser() {
     mutationFn: async ({ userId, data }: { userId: string; data: UpdateUserData }) => {
       return await request(`/api/inft3050/User/${userId}`, {
         method: 'PATCH',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
           'Content-Type': 'application/json',
         },

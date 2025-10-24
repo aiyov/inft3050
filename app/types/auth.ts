@@ -7,19 +7,7 @@ export type UserRole = 'customer' | 'employee' | 'admin';
 export interface User {
   id: string;
   email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  country?: string;
-  role: UserRole;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  username: string;
 }
 
 export interface AuthState {
@@ -30,7 +18,7 @@ export interface AuthState {
 }
 
 export interface LoginCredentials {
-  email: string;
+  username: string;
   password: string;
 }
 

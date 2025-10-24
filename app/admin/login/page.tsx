@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import useLogin from '../../hooks/useLogin';
+import useAuth from '@/app/hooks/useAuth';
 
 export default function AdminLoginPage() {
-  const { mutateAsync: login, isPending: isLoading } = useLogin();
+  const { handleAdminLogin, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ export default function AdminLoginPage() {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
+    if (isAuthenticated) {
       history.back();
     }
   }, []);
@@ -24,7 +25,7 @@ export default function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(formData);
+      await handleAdminLogin(formData);
       router.push('/admin/profile');
     } catch (error) {
       console.error('Failed to login:', error);
@@ -38,7 +39,7 @@ export default function AdminLoginPage() {
     }));
   };
 
-  if (localStorage.getItem('isLoggedIn') === 'true') {
+  if (isAuthenticated) {
     return null; // Will redirect
   }
 

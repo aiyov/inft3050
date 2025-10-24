@@ -11,12 +11,7 @@ export function useLogin() {
         method: 'POST',
         body: {},
       });
-    },
-    onSuccess: () => {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('user');
-      window.location.reload();
-    },
+    }
   });
 }
 

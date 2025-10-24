@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
-import { useUserSignUp } from '../hooks/useUserSignUp';
+import useAuth from '../hooks/useAuth';
+import useUserSignUp from '../hooks/useUserSignUp';
 
 export default function SignInPage() {
-  const { authState } = useAuth();
-  const { mutate: signUp } = useUserSignUp();
+  const { isAuthenticated} = useAuth();
+  const { mutateAsync: signUp, isPending: isLoading } = useUserSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -51,7 +51,7 @@ export default function SignInPage() {
     }));
   };
 
-  if (authState.isAuthenticated) {
+  if (isAuthenticated) {
     return null; // Will redirect
   }
 
@@ -141,20 +141,15 @@ export default function SignInPage() {
                 </button>
               </div>
             </div>
-
-            {authState.error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-                {authState.error}
-              </div>
-            )}
+          
 
             <div>
               <button
                 type="submit"
-                disabled={authState.isLoading}
+                disabled={isLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {authState.isLoading ? 'Creating Account...' : 'Create Account'}
+                {isLoading ? 'Creating Account...' : 'Create Account'}
               </button>
             </div>
           </form>

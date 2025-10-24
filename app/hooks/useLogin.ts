@@ -13,11 +13,7 @@ export function useLogin() {
           password: data.password,
         },
       });
-    },
-    onSuccess: (data:LoginResponse) => {
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('user', JSON.stringify(data));
-    },
+    }
   });
 }
 
