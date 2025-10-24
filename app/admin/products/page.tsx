@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import AdminLayout from '@/app/components/admin/layout/AdminLayout';
+import AdminLayout from '@/app/components/backstage-common/layout/AdminLayout';
 import { useProducts, Product } from '@/app/hooks/useProducts';
 import { useCreateProduct } from '@/app/hooks/useCreateProduct';
 import { useUpdateProduct } from '@/app/hooks/useUpdateProduct';

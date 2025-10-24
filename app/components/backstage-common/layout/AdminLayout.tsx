@@ -23,25 +23,25 @@ const getNavigationItems = (role: string) => {
     { name: 'Products', href: '/admin/products', icon: Package, roles: ['admin', 'employee'] },
     { name: 'Users', href: '/admin/users', icon: Users, roles: ['admin'] },
     { name: 'My Orders', href: '/admin/my-orders', icon: ShoppingCart, roles: ['customer'] },
-    { name: 'Profile', href: '/admin/profile', icon: User, roles: ['customer', 'employee', 'admin'] },
+    { name: 'Profile', href: role !== 'customer' ? '/admin/profile' : '/account/profile', icon: User, roles: ['customer', 'employee', 'admin'] },
   ];
 
   return baseItems.filter(item => item.roles.includes(role));
 };
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { handleLogout: logout } = useAuth();
+  const { handleLogout: logout, role } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
  
   const activeMenu = usePathname();
 
-  const navigationItems = getNavigationItems('admin');
+  const navigationItems = getNavigationItems(role || '');
 
   const handleLogout = () => {
     logout();
-    router.push('/admin/login');
+    router.push(role !== 'customer' ? '/admin/login' : '/');
   };
 
   return (
@@ -60,7 +60,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       }`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <h1 className="text-xl font-bold text-gray-900">
-            INFT3050 Admin
+            INFT3050 {role === 'customer' ? 'Account' : 'Admin'}
           </h1>
           <button
             onClick={() => setSidebarOpen(false)}

@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/app/contexts/AuthContext';
+import useAuth from '@/app/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import AdminLayout from '@/app/components/admin/layout/AdminLayout';
+import AdminLayout from '@/app/components/backstage-common/layout/AdminLayout';
 import { mockOrders } from '@/app/lib/mock-data';
 import { simulateApiDelay } from '@/app/lib/mock-data';
 import { Edit, Trash2, X } from 'lucide-react';
 
 export default function MyOrdersPage() {
-  const { authState } = useAuth();
+  const { user, isAuthenticated, role } = useAuth();
   const router = useRouter();
   const [orders, setOrders] = useState(() => [] as typeof mockOrders);
   const [loading, setLoading] = useState(false);
@@ -26,13 +26,7 @@ export default function MyOrdersPage() {
     country: '',
   });
 
-  useEffect(() => {
-    // Load user's orders when user is available
-    if (authState.user) {
-      const userOrders = mockOrders.filter(order => order.userId === authState.user!.id);
-      setOrders(userOrders);
-    }
-  }, [authState.user]);
+  
 
   const handleUpdateOrder = async (orderId: string, newStatus: string) => {
     setLoading(true);
@@ -131,7 +125,7 @@ export default function MyOrdersPage() {
     }
   };
 
-  if (!authState.isAuthenticated || !authState.user || authState.user.role !== 'customer') {
+  if (!isAuthenticated || !user || role !== 'customer') {
     return null;
   }
 
