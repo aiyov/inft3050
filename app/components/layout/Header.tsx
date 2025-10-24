@@ -1,9 +1,10 @@
 'use client';
 
-import { Search, User, ShoppingCart, LogIn } from 'lucide-react';
+import { Search, User, ShoppingCart, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import useLogout from '../../hooks/useLogout';
 
 interface HeaderProps {
   className?: string;
@@ -11,6 +12,9 @@ interface HeaderProps {
 
 export default function Header({ className }: HeaderProps) {
   const router = useRouter();
+  const { mutateAsync: logout } = useLogout();
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
   const handleSearch = (e: React.FormEvent) => {
@@ -30,7 +34,7 @@ export default function Header({ className }: HeaderProps) {
           <p className="hidden md:block">
             Seen it cheaper? Ask for a JB Deal! Live chat or call 13 52 44.
           </p>
-          
+
         </div>
       </div>
 
@@ -68,28 +72,49 @@ export default function Header({ className }: HeaderProps) {
             <Search className="w-6 h-6 text-gray-600" />
           </div>
 
-           <div className="flex items-center space-x-6">
-             <div className="flex items-center space-x-4">
-               <Link
-                 href="/login"
-                 className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
-               >
-                 <User className="w-4 h-4" />
-                 <span className="hidden sm:inline">sign in</span>
-               </Link>
-               <Link
-                 href="/signup"
-                 className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
-               >
-                 <LogIn className="w-4 h-4" />
-                 <span className="hidden sm:inline">Sign Up</span>
-               </Link>
-             </div>
-             <div className="flex items-center space-x-1">
-               <ShoppingCart className="w-4 h-4" />
-               <span className="hidden sm:inline">Cart</span>
-             </div>
-           </div>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
+              {!isLoggedIn ? (
+                <Link
+                  href="/login"
+                  className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
+                >
+                  <span className="hidden sm:inline">sign in</span>
+                </Link>
+              ):(
+                <>
+                <Link
+                  href="/account/profile"
+                  className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="hidden sm:inline">{user.username}</span>
+                </Link>
+                <button
+                  onClick={() => logout()}
+                  className="flex items-center space-x-1 hover:text-yellow-500 transition-colors cursor-pointer"
+                >
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+                </>
+              )}
+              {
+                isLoggedIn && (
+                  <Link
+                    href="/signup"
+                    className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
+                  >
+                    <span className="hidden sm:inline">Sign Up</span>
+                  </Link>
+                )
+              }
+
+            </div>
+            <div className="flex items-center space-x-1">
+              <ShoppingCart className="w-4 h-4" />
+              <span className="hidden sm:inline">Cart</span>
+            </div>
+          </div>
         </div>
       </div>
     </header>

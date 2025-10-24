@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
-import useLogin from '../hooks/useLogin';
+import useLogin from '../../hooks/useLogin';
 
 export default function AdminLoginPage() {
   const { mutateAsync: login, isPending: isLoading } = useLogin();
@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     try {
       await login(formData);
-      window.location.reload();
+      router.push('/admin/profile');
     } catch (error) {
       console.error('Failed to login:', error);
     }
@@ -49,9 +49,11 @@ export default function AdminLoginPage() {
           <h1 className="text-4xl font-bold text-black">
             <span className="text-yellow-500">INFT3050</span>
           </h1>
-          
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Admin Portal
+          </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Sign in to your account
+            Sign in to your admin account
           </p>
         </div>
       </div>
