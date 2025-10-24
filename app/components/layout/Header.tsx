@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import useAuth from '@/app/hooks/useAuth';
+import { useCart } from '@/app/contexts/CartContext';
 
 interface HeaderProps {
   className?: string;
@@ -13,6 +14,7 @@ interface HeaderProps {
 export default function Header({ className }: HeaderProps) {
   const router = useRouter();
   const { isAuthenticated, handleLogout, user } = useAuth();
+  const { getTotalItems } = useCart();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '');
   const handleSearch = (e: React.FormEvent) => {
@@ -108,10 +110,15 @@ export default function Header({ className }: HeaderProps) {
               }
 
             </div>
-            <div className="flex items-center space-x-1">
+            <Link href="/cart" className="flex items-center space-x-1 hover:text-yellow-500 transition-colors relative">
               <ShoppingCart className="w-4 h-4" />
               <span className="hidden sm:inline">Cart</span>
-            </div>
+              {getTotalItems() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {getTotalItems()}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
       </div>

@@ -50,7 +50,9 @@ export default function ProductItem({ product }: { product: Product }) {
       {/* Add to Cart Button */}
       <div className="mt-auto pt-2">
         <AddToCartButton
+          productId={product.ID}
           productName={product.Name}
+          productDescription={product.Description}
           className="w-full text-sm py-2"
         />
       </div>

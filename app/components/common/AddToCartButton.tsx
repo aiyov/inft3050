@@ -3,33 +3,42 @@
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import AddToCartModal from '../modals/AddToCartModal';
+import { useCart } from '@/app/contexts/CartContext';
 
 interface AddToCartButtonProps {
+  productId: number;
   productName: string;
+  productDescription: string;
   className?: string;
 }
 
 export default function AddToCartButton({ 
-  productName, 
+  productId,
+  productName,
+  productDescription,
   className = '' 
 }: AddToCartButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { addToCart } = useCart();
 
   const handleAddToCart = async () => {
     setIsLoading(true);
     
     try {
       // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      // 这里可以添加实际的API调用
-      // await addToCartAPI(productId);
+      // 添加到购物车
+      addToCart({
+        id: productId,
+        name: productName,
+        description: productDescription,
+      });
       
       setIsModalOpen(true);
     } catch (error) {
       console.error('Failed to add to cart:', error);
-      // 可以添加错误提示
     } finally {
       setIsLoading(false);
     }
