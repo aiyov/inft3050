@@ -4,9 +4,12 @@ import useLogout from "./useLogout";
 import { useState, useEffect } from "react";
 import { LoginCredentials, UserRole } from "../types/auth";
 const useAuth = () => {
-  const [user, setUser] = useState<any>(null);
-  const [role, setRole] = useState<UserRole | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const localRole = localStorage.getItem("role");
+  const localIsAuthenticated = localStorage.getItem("isAuthenticated");
+  const localUser = localStorage.getItem("user");
+  const [user, setUser] = useState<any>(localUser ? JSON.parse(localUser) : null);
+  const [role, setRole] = useState<UserRole | null>(localRole as UserRole | null);
+  const [isAuthenticated, setIsAuthenticated] = useState(localIsAuthenticated === "true");
   const { mutateAsync: login, isPending: isLoading } = useLogin();
   const { mutateAsync: logout, isPending: isLoggingOut } = useLogout();
   const handleAdminLogin = async (credentials: LoginCredentials) => {

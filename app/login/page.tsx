@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 export default function AdminLoginPage() {
   const { handleCustomerLogin, isLoading, isAuthenticated } = useAuth();
@@ -21,15 +22,17 @@ export default function AdminLoginPage() {
     if (isAuthenticated) {
       history.back();
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await handleCustomerLogin(formData);
+      toast.success('Login successful! Welcome back!');
       router.replace(redirect || '/');
     } catch (error) {
       console.error('Failed to login:', error);
+      toast.error('Login failed. Please check your credentials and try again.');
     }
   };
 

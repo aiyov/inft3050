@@ -7,11 +7,15 @@ import { useCreatePatron } from '@/app/hooks/useCreatePatron';
 import { useUpdatePatron } from '@/app/hooks/useUpdatePatron';
 import { useDeletePatron } from '@/app/hooks/useDeletePatron';
 import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
+import useAuth from '@/app/hooks/useAuth';
 
 export default function UsersPage() {
+  const { role } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingPatron, setEditingPatron] = useState<Patron | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const isEmployee = role === 'employee';
   const [formData, setFormData] = useState({
     Name: '',
     Email: '',
@@ -55,10 +59,12 @@ export default function UsersPage() {
         Salt: generateSalt(),
         HashPW: await sha256(formData.password + generateSalt())
       });
+      toast.success('Patron created successfully!');
       setShowCreateModal(false);
       resetForm();
     } catch (error) {
       console.error('Failed to create patron:', error);
+      toast.error('Failed to create patron. Please try again.');
     }
   };
 
@@ -76,10 +82,12 @@ export default function UsersPage() {
           HashPW: await sha256(formData.password + generateSalt())
         }
       });
+      toast.success('Patron updated successfully!');
       setEditingPatron(null);
       resetForm();
     } catch (error) {
       console.error('Failed to update patron:', error);
+      toast.error('Failed to update patron. Please try again.');
     }
   };
 
@@ -90,8 +98,10 @@ export default function UsersPage() {
 
     try {
       await deletePatron.mutateAsync(patronId);
+      toast.success('Patron deleted successfully!');
     } catch (error) {
       console.error('Failed to delete patron:', error);
+      toast.error('Failed to delete patron. Please try again.');
     }
   };
 
@@ -125,19 +135,23 @@ export default function UsersPage() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Patrons</h1>
-            <p className="text-gray-600">Manage patron accounts</p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Patrons</h1>
+              <p className="text-gray-600">
+                {isEmployee ? 'View patron accounts' : 'Manage patron accounts'}
+              </p>
+            </div>
+            {!isEmployee && (
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Patron
+              </button>
+            )}
           </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Patron
-          </button>
-        </div>
 
         {/* Patrons Table */}
         <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -184,22 +198,26 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {patron.Email}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleEditPatron(patron)}
-                            className="text-yellow-600 hover:text-yellow-900"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeletePatron(patron.UserID.toString())}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          {!isEmployee ? (
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleEditPatron(patron)}
+                                className="text-yellow-600 hover:text-yellow-900"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDeletePatron(patron.UserID.toString())}
+                                className="text-red-600 hover:text-red-900"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-gray-400 text-sm">View Only</span>
+                          )}
+                        </td>
                     </tr>
                   ))
                 )}
@@ -258,7 +276,7 @@ export default function UsersPage() {
         </div>
 
         {/* Create Modal */}
-        {showCreateModal && (
+        {showCreateModal && !isEmployee && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
               <div className="mt-3">
@@ -336,7 +354,7 @@ export default function UsersPage() {
         )}
 
         {/* Edit Modal */}
-        {editingPatron && (
+        {editingPatron && !isEmployee && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
               <div className="mt-3">

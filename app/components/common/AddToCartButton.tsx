@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import AddToCartModal from '../modals/AddToCartModal';
 import { useCart } from '@/app/contexts/CartContext';
+import toast from 'react-hot-toast';
 
 interface AddToCartButtonProps {
   productId: number;
@@ -36,9 +37,11 @@ export default function AddToCartButton({
         description: productDescription,
       });
       
+      toast.success(`${productName} added to cart!`);
       setIsModalOpen(true);
     } catch (error) {
       console.error('Failed to add to cart:', error);
+      toast.error('Failed to add item to cart. Please try again.');
     } finally {
       setIsLoading(false);
     }

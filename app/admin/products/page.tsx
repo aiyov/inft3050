@@ -8,11 +8,15 @@ import { useUpdateProduct } from '@/app/hooks/useUpdateProduct';
 import { useDeleteProduct } from '@/app/hooks/useDeleteProduct';
 import { useGenres } from '@/app/hooks/useGenres';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import useAuth from '@/app/hooks/useAuth';
 
 export default function UsersPage() {
+  const { role } = useAuth();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const isEmployee = role === 'employee';
   const [formData, setFormData] = useState({
     Name: '',
     Author: '',
@@ -44,10 +48,12 @@ export default function UsersPage() {
     e.preventDefault();
     try {
       await createProduct.mutateAsync(formData);
+      toast.success('Product created successfully!');
       setShowCreateModal(false);
       resetForm();
     } catch (error) {
       console.error('Failed to create product:', error);
+      toast.error('Failed to create product. Please try again.');
     }
   };
 
@@ -60,10 +66,12 @@ export default function UsersPage() {
         productId: editingProduct.ID.toString(), 
         data: formData 
       });
+      toast.success('Product updated successfully!');
       setEditingProduct(null);
       resetForm();
     } catch (error) {
       console.error('Failed to update product:', error);
+      toast.error('Failed to update product. Please try again.');
     }
   };
 
@@ -74,8 +82,10 @@ export default function UsersPage() {
 
     try {
       await deleteProduct.mutateAsync(productId);
+      toast.success('Product deleted successfully!');
     } catch (error) {
       console.error('Failed to delete product:', error);
+      toast.error('Failed to delete product. Please try again.');
     }
   };
 
@@ -114,15 +124,19 @@ export default function UsersPage() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-            <p className="text-gray-600">Manage product inventory</p>
+            <p className="text-gray-600">
+              {isEmployee ? 'View product inventory' : 'Manage product inventory'}
+            </p>
           </div>
-          <button
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Product
-          </button>
+          {!isEmployee && (
+            <button
+              onClick={() => setShowCreateModal(true)}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Product
+            </button>
+          )}
         </div>
 
         {/* Products Table */}
@@ -182,22 +196,26 @@ export default function UsersPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {new Date(product.LastUpdated).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleEditProduct(product)}
-                            className="text-yellow-600 hover:text-yellow-900"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteProduct(product.ID.toString())}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          {!isEmployee ? (
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleEditProduct(product)}
+                                className="text-yellow-600 hover:text-yellow-900"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteProduct(product.ID.toString())}
+                                className="text-red-600 hover:text-red-900"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-gray-400 text-sm">View Only</span>
+                          )}
+                        </td>
                     </tr>
                   ))
                 )}
@@ -256,7 +274,7 @@ export default function UsersPage() {
         </div>
 
         {/* Create Modal */}
-        {showCreateModal && (
+        {showCreateModal && !isEmployee && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
               <div className="mt-3">
@@ -349,7 +367,7 @@ export default function UsersPage() {
         )}
 
         {/* Edit Modal */}
-        {editingProduct && (
+        {editingProduct && !isEmployee && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
               <div className="mt-3">

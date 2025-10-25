@@ -7,6 +7,7 @@ import { useCart } from '@/app/contexts/CartContext';
 import { CreditCard, MapPin, ShoppingBag } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -63,12 +64,12 @@ export default function CheckoutPage() {
       // 清空购物车
       clearCart();
 
-      // 跳转到成功页面或订单页面
-      alert('Order placed successfully!');
+      // 显示成功提示
+      toast.success('Order placed successfully! Thank you for your purchase!');
       router.push('/');
     } catch (error) {
       console.error('Failed to place order:', error);
-      alert('Failed to place order. Please try again.');
+      toast.error('Failed to place order. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

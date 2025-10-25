@@ -59,7 +59,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 onClick={() => role === 'customer' && router.push('/')} className="text-xl font-bold text-gray-900 cursor-pointer">
             INFT3050 {role === 'customer' ? 'Account' : 'Admin'}
           </h1>
           <button

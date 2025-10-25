@@ -6,6 +6,7 @@ import { Eye, EyeOff, Save } from 'lucide-react';
 import useAuth from '@/app/hooks/useAuth';
 import useUpdateUser from '@/app/hooks/useUpdateUser';
 import useUser from '@/app/hooks/useUser';
+import toast from 'react-hot-toast';
 
 export default function AdminProfile() {
   const { user, role, isAuthenticated } = useAuth(); 
@@ -40,10 +41,12 @@ export default function AdminProfile() {
       const userId = user?.id;
       if (userId) {
         await updateUser({ userId, data: { Username: formData.username, Email: formData.email } });
+        toast.success('Profile updated successfully!');
       }
       setFormData(prev => ({ ...prev, password: '' }));
     } catch (error) {
       console.error('Failed to update user:', error);
+      toast.error('Failed to update profile. Please try again.');
     } 
   };
 
