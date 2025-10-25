@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 
 export default function AdminLoginPage() {
   const { handleCustomerLogin, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams?.get('redirect');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -25,7 +27,7 @@ export default function AdminLoginPage() {
     e.preventDefault();
     try {
       await handleCustomerLogin(formData);
-      router.replace('/');
+      router.replace(redirect || '/');
     } catch (error) {
       console.error('Failed to login:', error);
     }

@@ -5,9 +5,14 @@ import Navigation from '@/app/components/layout/Navigation';
 import { useCart } from '@/app/contexts/CartContext';
 import { Trash2, Plus, Minus, ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
+import LoginRequiredModal from '@/app/components/modals/LoginRequiredModal';
+import useAuth from '@/app/hooks/useAuth';
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, clearCart, getTotalItems } = useCart();
+  const { isAuthenticated } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleIncreaseQuantity = (id: number, currentQuantity: number) => {
     updateQuantity(id, currentQuantity + 1);
@@ -29,6 +34,15 @@ export default function CartPage() {
     if (confirm('Are you sure you want to clear the entire cart?')) {
       clearCart();
     }
+  };
+
+  const handleCheckoutClick = () => {
+    if (!isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    // 如果已登录，跳转到checkout页面
+    window.location.href = '/checkout';
   };
 
   return (
@@ -155,12 +169,12 @@ export default function CartPage() {
                 </div>
                 
                 <div className="space-y-3">
-                  <Link
-                    href="/checkout"
-                    className="block w-full px-6 py-3 text-center bg-yellow-400 text-black rounded-md hover:bg-yellow-500 transition-colors font-medium"
+                  <button
+                    onClick={handleCheckoutClick}
+                    className="w-full px-6 py-3 bg-yellow-400 text-black rounded-md hover:bg-yellow-500 transition-colors font-medium"
                   >
                     Proceed to Checkout
-                  </Link>
+                  </button>
                   <Link
                     href="/"
                     className="block w-full px-6 py-3 text-center border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors font-medium"
@@ -173,6 +187,12 @@ export default function CartPage() {
           </div>
         )}
       </div>
+
+      {/* Login Required Modal */}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+      />
     </div>
   );
 }
