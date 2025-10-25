@@ -44,7 +44,7 @@ export default function Header({ className }: HeaderProps) {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <div className="text-3xl font-bold text-black">
+              <div className="md:text-3xl font-bold text-black">
                 <span className="text-yellow-500">INFT3050</span>
               </div>
             </Link>
@@ -54,22 +54,17 @@ export default function Header({ className }: HeaderProps) {
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8 hidden md:block">
+          <div className="flex-1 max-w-2xl mx-8">
             <div className="relative">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleInputChange}
                 placeholder="Search products"
-                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                className="w-full px-4 py-1 md:py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
               />
               <Search onClick={handleSearch} className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             </div>
-          </div>
-
-          {/* Mobile Search */}
-          <div className="md:hidden">
-            <Search className="w-6 h-6 text-gray-600" />
           </div>
 
           <div className="flex items-center space-x-6">
@@ -79,7 +74,7 @@ export default function Header({ className }: HeaderProps) {
                   href="/login"
                   className="flex items-center space-x-1 hover:text-yellow-500 transition-colors"
                 >
-                  <span className="hidden sm:inline">sign in</span>
+                  <span>sign in</span>
                 </Link>
               ):(
                 <>
@@ -94,7 +89,7 @@ export default function Header({ className }: HeaderProps) {
                   onClick={() => handleLogout()}
                   className="flex items-center space-x-1 hover:text-yellow-500 transition-colors cursor-pointer"
                 >
-                  <span className="hidden sm:inline">Logout</span>
+                  <span>Logout</span>
                 </button>
                 </>
               )}
